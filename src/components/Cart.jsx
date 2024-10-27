@@ -1,6 +1,10 @@
 import data from "../assets/data";
+import { useCart } from "../context/cartContext";
+import { useMenu } from "../context/menuContext";
 
-function Cart({ menu, cart, setCart }) {
+function Cart() {
+  const { menu } = useMenu();
+  const { cart } = useCart();
   if (!menu)
     return (
       <div style={{ textAlign: "center", margin: "80px" }}>
@@ -19,8 +23,6 @@ function Cart({ menu, cart, setCart }) {
               item={allMenus.find((menu) => menu.id === el.id)}
               options={el.options}
               quantity={el.quantity}
-              cart={cart}
-              setCart={setCart}
             />
           ))
         ) : (
@@ -31,7 +33,8 @@ function Cart({ menu, cart, setCart }) {
   );
 }
 
-function CartItem({ item, options, quantity, cart, setCart }) {
+function CartItem({ item, options, quantity }) {
+  const { removeFromCart } = useCart();
   return (
     <li className="cart-item">
       <div className="cart-item-info">
@@ -49,7 +52,7 @@ function CartItem({ item, options, quantity, cart, setCart }) {
       <button
         className="cart-item-delete"
         onClick={() => {
-          setCart(cart.filter((el) => item.id !== el.id));
+          removeFromCart(item.id);
         }}
       >
         삭제
